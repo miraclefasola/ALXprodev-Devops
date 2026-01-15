@@ -43,3 +43,5 @@ END {
     if (count > 0) 
         printf "Average Height: %.2f m\nAverage Weight: %.2f kg\n", sum_h/count, sum_w/count
 }' "$CSV_FILE"
+
+#["sed"]

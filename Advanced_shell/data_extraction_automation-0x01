@@ -1,0 +1,23 @@
+#!/bin/bash
+
+file="data.json"
+[ -f "$file" ] || exit 1
+
+jq -r '
+.name,
+.height,
+.weight,
+.types[0].type.name
+' "$file" |
+awk '
+NR==1 { name=$0 }
+NR==2 { height=$0 }
+NR==3 { weight=$0 }
+NR==4 {
+    printf "%s is of type %s, weighs %.0fkg, and is %.1fm tall.\n",
+           name, $0, weight/10, height/10
+}' |
+
+sed -E 's/^./\U&/; s/type ([a-z]+)/type \u\1/'
+
+

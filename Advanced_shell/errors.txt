@@ -4,3 +4,9 @@ curl: try 'curl --help' or 'curl --manual' for more information
   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
                                  Dload  Upload   Total   Spent    Left  Speed
   0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100  1417    0  1417    0     0   1430      0 --:--:-- --:--:-- --:--:--  1435
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100  137k    0  137k    0     0  80034      0 --:--:--  0:00:01 --:--:-- 80244100  254k    0  254k    0     0   115k      0 --:--:--  0:00:02 --:--:--  115k
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100  155k    0  155k    0     0   135k      0 --:--:--  0:00:01 --:--:--  135k100  254k    0  254k    0     0   209k      0 --:--:--  0:00:01 --:--:--  210k

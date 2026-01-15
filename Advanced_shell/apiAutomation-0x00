@@ -1,5 +1,6 @@
 #!/bin/bash
-url="https://pokeapi.co/api/v2/pokemon/"
+url="https://pokeapi.co/api/v2/pokemon/pikachu" 
 if [ -n $url ]; then
     curl "$url" 2>> errors.txt 1>> data.json
+
 fi

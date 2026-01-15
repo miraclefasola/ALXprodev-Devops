@@ -20,4 +20,4 @@ NR==4 {
 
 sed -E 's/^./\U&/; s/type ([a-z]+)/type \u\1/'
 
-
+#["$name is of type $type, weighs ${formatted_weight}kg, and is ${formatted_height}m tall."]

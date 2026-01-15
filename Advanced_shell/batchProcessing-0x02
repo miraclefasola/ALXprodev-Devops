@@ -1,0 +1,26 @@
+#!/bin/bash
+
+# Create the directory if it doesn't exist
+DIR="pokemon_data"
+mkdir -p "$DIR"
+
+# Define the list of Pokemon
+POKEMON_LIST=("bulbasaur" "ivysaur" "venusaur" "charmander" "charmeleon")
+
+for POKE in "${POKEMON_LIST[@]}"; do
+    echo "Fetching data for $POKE..."
+    
+    # 1. Hit the API and save to the file inside the directory
+    # -s makes curl silent (no progress bar)
+    curl -s "https://pokeapi.co/api/v2/pokemon/$POKE" > "$DIR/$POKE.json"
+    
+    # Check if the file was actually created and is not empty
+    if [ -s "$DIR/$POKE.json" ]; then
+        echo "Saved data to $DIR/$POKE.json ✅"
+    else
+        echo "Failed to save data for $POKE ❌"
+    fi
+
+    # 2. Rate Limiting: wait 1 second before the next request
+    sleep 1
+done

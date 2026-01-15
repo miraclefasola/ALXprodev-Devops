@@ -1,26 +1,37 @@
 #!/bin/bash
 
-# Create the directory if it doesn't exist
 DIR="pokemon_data"
 mkdir -p "$DIR"
-
-# Define the list of Pokemon
-POKEMON_LIST=("bulbasaur" "ivysaur" "venusaur" "charmander" "charmeleon")
+POKEMON_LIST=("bulbasaur" "ivysaur" "venusaur" "charmander" "charmeleon" "invalid_name")
 
 for POKE in "${POKEMON_LIST[@]}"; do
+    SUCCESS=false
+    MAX_RETRIES=3
+    ATTEMPT=1
+
     echo "Fetching data for $POKE..."
-    
-    # 1. Hit the API and save to the file inside the directory
-    # -s makes curl silent (no progress bar)
-    curl -s "https://pokeapi.co/api/v2/pokemon/$POKE" > "$DIR/$POKE.json"
-    
-    # Check if the file was actually created and is not empty
-    if [ -s "$DIR/$POKE.json" ]; then
-        echo "Saved data to $DIR/$POKE.json ✅"
-    else
-        echo "Failed to save data for $POKE ❌"
+
+    while [ $ATTEMPT -le $MAX_RETRIES ]; do
+        # -f tells curl to fail silently on server errors (404/500)
+        # -s makes it silent
+        curl -fs "https://pokeapi.co/api/v2/pokemon/$POKE" > "$DIR/$POKE.json"
+        
+        if [ $? -eq 0 ]; then
+            echo "Saved data to $DIR/$POKE.json ✅"
+            SUCCESS=true
+            break # Exit the while loop early if successful
+        else
+            echo "Attempt $ATTEMPT failed for $POKE. Retrying..."
+            ((ATTEMPT++))
+            sleep 2 # Wait longer between retries to be safe
+        fi
+    done
+
+    if [ "$SUCCESS" = false ]; then
+        echo "ERROR: Failed to fetch $POKE after $MAX_RETRIES attempts. Skipping. ❌"
+        # Clean up the empty/failed file if it exists
+        rm -f "$DIR/$POKE.json"
     fi
 
-    # 2. Rate Limiting: wait 1 second before the next request
     sleep 1
 done

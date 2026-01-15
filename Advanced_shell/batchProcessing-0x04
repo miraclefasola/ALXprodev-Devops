@@ -1,0 +1,33 @@
+#!/bin/bash
+
+DIR="pokemon_data"
+mkdir -p "$DIR"
+POKEMON_LIST=("bulbasaur" "ivysaur" "venusaur" "charmander" "charmeleon")
+
+# Function to handle the download (makes the loop cleaner)
+fetch_pokemon() {
+    local poke=$1
+    echo "Fetching data for $poke..."
+    
+    # We still use -fs for safety
+    curl -fs "https://pokeapi.co/api/v2/pokemon/$poke" > "$DIR/$poke.json"
+    
+    if [ $? -eq 0 ]; then
+        echo "Saved data to $DIR/$poke.json ✅"
+    else
+        echo "Failed to fetch $poke ❌"
+    fi
+}
+
+echo "Starting parallel download..."
+
+for POKE in "${POKEMON_LIST[@]}"; do
+    # The '&' at the end sends this function call to the background
+    fetch_pokemon "$POKE" & 
+done
+
+# VERY IMPORTANT: Wait for all background processes to finish
+wait
+
+echo "------------------------------------------"
+echo "All downloads complete! Moving to next step."

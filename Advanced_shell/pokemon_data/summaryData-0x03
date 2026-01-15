@@ -1,0 +1,45 @@
+#!/bin/bash
+
+CSV_FILE="pokemon_report.csv"
+DATA_DIR="pokemon_data"
+
+# 1. Create CSV Header
+echo "Name,Height (m),Weight (kg)" > "$CSV_FILE"
+
+# 2. Extract data from each JSON file
+# Using * to catch every .json file in the folder
+for file in "$DATA_DIR"/*.json; do
+    # Extract raw values
+    NAME=$(jq -r '.name' "$file")
+    H_RAW=$(jq -r '.height' "$file")
+    W_RAW=$(jq -r '.weight' "$file")
+
+    # Capitalize Name and convert units (4 -> 0.4, 60 -> 6)
+    # Using awk to handle the math and formatting for the CSV lines
+    row=$(awk -v n="$NAME" -v h="$H_RAW" -v w="$W_RAW" 'BEGIN {
+        name = toupper(substr(n,1,1)) substr(n,2)
+        printf "%s,%.1f,%.1f", name, h/10, w/10
+    }')
+    
+    echo "$row" >> "$CSV_FILE"
+done
+
+echo "CSV Report generated at: $CSV_FILE"
+echo ""
+
+# 3. Display the CSV content (excluding the header for clarity)
+cat "$CSV_FILE"
+echo ""
+
+# 4. Use AWK to calculate averages
+# NR > 1 ignores the header row
+# FONT = Field Separator (comma)
+awk -F',' 'NR > 1 {
+    sum_h += $2; 
+    sum_w += $3; 
+    count++
+} 
+END {
+    if (count > 0) 
+        printf "Average Height: %.2f m\nAverage Weight: %.2f kg\n", sum_h/count, sum_w/count
+}' "$CSV_FILE"
